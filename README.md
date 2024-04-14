@@ -1,2 +1,1 @@
-# Tasks-NodeJS
-Repo contains solved tasks.
+# Tasks are located in separate branches.
