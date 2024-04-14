@@ -1,2 +1,1 @@
-# Tasks-NodeJS
-Repo contains solved tasks.
+# Task 1 - Calculations
