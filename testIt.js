@@ -6,6 +6,7 @@ try {
     console.log("addValues(5, 3) =", dataTransformation.addValues(5, 3)); // Expected output: 8
     console.log("addValues('5', '3') =", dataTransformation.addValues('5', '3')); // Expected output: 8
     console.log("addValues('abc', 3) =", dataTransformation.addValues('abc', 3)); // Expected Error
+    console.log("addValues(5, '3') =", dataTransformation.addValues(5, '3')); // Expected output: 8
 } catch (error) {
     console.error(error.message);
 }

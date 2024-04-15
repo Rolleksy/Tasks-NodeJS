@@ -1,17 +1,11 @@
 function addValues(a, b) {
-    if (typeof a === 'string' && typeof b === 'string') {
-        a = parseFloat(a);
-        b = parseFloat(b);
-
-        if (isNaN(a) || isNaN(b)) {
-            throw new Error('Both arguments must be numbers');
-        }
-        return a + b;
+    if (typeof a === 'string' || typeof b === 'string') {
+        return String(a) + String(b);
     }
     if (typeof a !== 'number' || typeof b !== 'number') {
         throw new Error('Both arguments must be numbers');
     }
-    return a + b
+    return a + b;
 }
 
 function stringifyValue(a) {
