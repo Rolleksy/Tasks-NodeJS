@@ -41,12 +41,9 @@ function convertToNumber(a) {
 function coerceToType(a, type) {
   switch (type) {
     case 'number':
-      return Number(a)
+      return convertToNumber(a)
     case 'string':
-        if (typeof a === 'object') {
-            return JSON.stringify(a);
-        }
-      return a.toString()
+        return stringifyValue(a)
     case 'boolean':
       return !!a
     default:
