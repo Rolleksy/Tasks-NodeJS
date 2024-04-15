@@ -45,7 +45,7 @@ function coerceToType(a, type) {
     case 'string':
         return stringifyValue(a)
     case 'boolean':
-      return !!a
+      return invertBoolean(a)
     default:
       return a
   }
