@@ -16,7 +16,7 @@ const person = {
     value: function(newInfo) {
       Object.keys(newInfo).forEach(prop => {
         if (this.hasOwnProperty(prop)) {
-          if (Object.getOwnPropertyDescriptor(this, prop).writable === false) {
+          if (Object.getOwnPropertyDescriptor(this, prop).writable === false || prop === "address") {
             this[prop] = newInfo[prop];
           }
         }
