@@ -1,12 +1,18 @@
 function customFilterUnique(arr, callbackFn) {
     const uniqueArr = [];
-    const uniqueValues = [];
+    const uniqueValues = {};
 
     arr.forEach(element => {
         const value = callbackFn(element);
-        if (!uniqueValues.includes(value)) {
-            uniqueValues.push(value);
+        if (!uniqueValues[value]) {
+            uniqueValues[value] = true;
             uniqueArr.push(element);
+        } else {
+            uniqueArr.forEach((item, index) => {
+                if (callbackFn(item) === value) {
+                    uniqueArr.splice(index, 1);
+                }
+            });
         }
     });
 
