@@ -2,7 +2,8 @@
 
 ## Task 1: Quasi-Tagged Templates
 You are working on a localization library that uses tagged templates to handle multiple languages. Implement a function called localize that acts as a quasi-tagged template. The function should take a template string and an object containing language-specific translations. It should replace placeholders in the template string with the corresponding translations from the provided object.
-```const translations = {
+```JavaScript
+const translations = {
 	en: {
 	greet: "Hello",
 	intro: "Welcome to our website"
@@ -26,7 +27,7 @@ console.log(localizedIntroduction); // Expected: "Bienvenue sur notre site web" 
 ​
 ## Task 2: Advanced Tagged Template
 Create a function called highlightKeywords that acts as a tagged template. The function should take a template string and an array of keywords. It should highlight each occurrence of a keyword in the template by wrapping it in a <span> element with a specific CSS class. Use template literals and string manipulation to achieve this.
-```
+```JavaScript
 const keywords = ["JavaScript", "template", "tagged"];
 const template = "Learn \${0} tagged templates to create custom \${1} literals for \${2} manipulation.";
 
@@ -38,7 +39,7 @@ console.log(highlighted);
 ​
 ## Task 3: Multiline Tagged Template
 Implement a multiline tagged template function called multiline that takes a template string and returns a string with line numbers added at the beginning of each line. The line numbers should start from 1 and increase for each line. Preserve the original indentation of each line.
-```
+```JavaScript
 const code = multiline\`
 function add(a, b) {
 return a + b;
@@ -65,7 +66,7 @@ Clear any existing timeout.
 Set a new timeout to execute the provided function after the specified delay time.
 Test your debounce function by using it to debounce an input event listener. Ensure that the provided function is only called once after the user stops typing for the specified delay time.
 Example
-```
+```JavaScript
 function debouncedSearch(query) {
 	// Perform search operation with the query
 	console.log("Searching for:", query);
@@ -92,7 +93,7 @@ If the interval has not elapsed, ignore the invocation.
 If the interval has elapsed, execute the provided function and update the last execution timestamp.
 Test your throttle function by using it to throttle a scroll event listener. Ensure that the provided function is executed at most once within the specified time interval during rapid scrolling.
 Example
-```
+```JavaScript
 function onScroll(event) {
 	// Handle scroll event
 	console.log("Scroll event:", event);
@@ -113,7 +114,7 @@ The curry function should return a new curried function.
 The curried function should keep accepting arguments until it has received the specified number of arguments (arity). Once all arguments are received, the original function should be executed with the collected arguments.
 If the curried function is invoked with fewer arguments than arity, it should return a new curried function that waits for the remaining arguments.
 Example
-```
+```JavaScript
 function multiply(a, b, c) {
 	return a * b * c;
 }
