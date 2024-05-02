@@ -1,130 +1,108 @@
-# Homework 6
-
-## Task 1: Quasi-Tagged Templates
-You are working on a localization library that uses tagged templates to handle multiple languages. Implement a function called localize that acts as a quasi-tagged template. The function should take a template string and an object containing language-specific translations. It should replace placeholders in the template string with the corresponding translations from the provided object.
-```const translations = {
-	en: {
-	greet: "Hello",
-	intro: "Welcome to our website"
-},
-	fr: {
-		greet: "Bonjour",
-		intro: "Bienvenue sur notre site web"
-	}
-};
-
-const language = "fr"; // Change to "en" for English
-const greeting = "greet";
-const introduction = "intro";
-
-const localizedGreeting = localize`${greeting}`;
-const localizedIntroduction = localize`${introduction}`;
-
-console.log(localizedGreeting); // Expected: "Bonjour" (for language "fr")
-console.log(localizedIntroduction); // Expected: "Bienvenue sur notre site web" (for language "fr")
-```
-​
-## Task 2: Advanced Tagged Template
-Create a function called highlightKeywords that acts as a tagged template. The function should take a template string and an array of keywords. It should highlight each occurrence of a keyword in the template by wrapping it in a <span> element with a specific CSS class. Use template literals and string manipulation to achieve this.
-```
-const keywords = ["JavaScript", "template", "tagged"];
-const template = "Learn \${0} tagged templates to create custom \${1} literals for \${2} manipulation.";
-
-const highlighted = highlightKeywords(template, keywords);
-
-console.log(highlighted);
-// Expected: "Learn <span class='highlight'>JavaScript</span> tagged templates to create custom <span class='highlight'>template</span> literals for <span class='highlight'>tagged</span> manipulation."
-```
-​
-## Task 3: Multiline Tagged Template
-Implement a multiline tagged template function called multiline that takes a template string and returns a string with line numbers added at the beginning of each line. The line numbers should start from 1 and increase for each line. Preserve the original indentation of each line.
-```
-const code = multiline\`
-function add(a, b) {
-return a + b;
-}
-\`;
-
-console.log(code);
-// Expected:
-// "1 function add(a, b) {
-//  2 return a + b;
-//  3 }"
-```
-
-## Task 4: Implementing Debounce Function
-Description
-Your task is to implement a debounce function that takes a function and a delay time as arguments. The goal of the debounce function is to ensure that the provided function is only executed after the user stops invoking it for the specified delay time.
+# Homework 7
+## Task 1: Implement promiseAll Function
+Your task is to implement a function called promiseAll that mimics the behavior of Promise.all(). The function should accept an array of promises and return a single promise that resolves to an array of resolved values or rejects with the reason of the first rejected promise.
 Instructions
-Implement a function called debounce that takes two arguments:
-func: The function to be debounced.
-delay: The delay time (in milliseconds) before the function is executed.
-The debounce function should return a new function that wraps the provided function.
-When the new function is invoked, it should:
-Clear any existing timeout.
-Set a new timeout to execute the provided function after the specified delay time.
-Test your debounce function by using it to debounce an input event listener. Ensure that the provided function is only called once after the user stops typing for the specified delay time.
+Implement a function called promiseAll that takes an array of promises as an argument.
+The function should return a new promise that resolves when all promises in the input array have resolved, and rejects if any of the promises reject.
+If all promises resolve, the resolved value of the returned promise should be an array containing the resolved values of the input promises, in the same order.
+If any promise rejects, the returned promise should reject with the reason of the first rejected promise.
 Example
+```JavaScript
+const promises = [
+  Promise.resolve(1),
+  Promise.resolve(2),
+  Promise.resolve(3)
+];
+
+promiseAll(promises)
+  .then(results => {
+    console.log("All promises resolved:", results); // Expected: [1, 2, 3]
+  })
+  .catch(error => {
+    console.error("At least one promise rejected:", error);
+  });
 ```
-function debouncedSearch(query) {
-	// Perform search operation with the query
-	console.log("Searching for:", query);
-}
 
-const debouncedSearchHandler = debounce(debouncedSearch, 300);
-
-const inputElement = document.getElementById("search-input");
-inputElement.addEventListener("input", event => {
-	debouncedSearchHandler(event.target.value);
-});
-```
-
-## Task 5: Implementing Throttle Function
-Your task is to implement a throttle function that takes a function and a time interval as arguments. The throttle function should ensure that the provided function is executed at most once within the specified time interval.
+## Task 2: Implement promiseAllSettled Function
+Your task is to implement a function called promiseAllSettled that mimics the behavior of Promise.allSettled(). The function should accept an array of promises and return a promise that resolves to an array of objects representing the settlement of each promise.
 Instructions
-Implement a function called throttle that takes two arguments:
-func: The function to be throttled.
-interval: The time interval (in milliseconds) within which the function can be executed.
-The throttle function should return a new function that wraps the provided function.
-When the new function is invoked, it should:
-Check if the specified time interval has elapsed since the last execution of the provided function.
-If the interval has not elapsed, ignore the invocation.
-If the interval has elapsed, execute the provided function and update the last execution timestamp.
-Test your throttle function by using it to throttle a scroll event listener. Ensure that the provided function is executed at most once within the specified time interval during rapid scrolling.
+Implement a function called promiseAllSettled that takes an array of promises as an argument.
+The function should return a new promise that resolves with an array of objects representing the settlement of each promise in the input array.
+Each object in the resolved array should have properties status and value or reason. The status can be either 'fulfilled' or 'rejected', and value should hold the resolved value (if fulfilled) or reason should hold the rejection reason (if rejected).
 Example
+```JavaScript
+const promises = [
+  Promise.resolve(1),
+  Promise.reject("Error occurred"),
+  Promise.resolve(3)
+];
+
+promiseAllSettled(promises)
+  .then(results => {
+    console.log("All promises settled:", results);
+    // Expected: [{ status: 'fulfilled', value: 1 },
+    //            { status: 'rejected', reason: 'Error occurred' },
+    //            { status: 'fulfilled', value: 3 }]
+  });
 ```
-function onScroll(event) {
-	// Handle scroll event
-	console.log("Scroll event:", event);
-}
-
-const throttledScrollHandler = throttle(onScroll, 1000);
-
-window.addEventListener("scroll", throttledScrollHandler);
-```
-
-## Task 6: Currying Function Implementation
-Your task is to implement a currying function that converts a given function into a curried version. Currying is a technique in which a function that takes multiple arguments is transformed into a sequence of functions, each taking a single argument.
+## Task 3: Implement Chaining of Promises as a Separate Function
+Your task is to implement a function called chainPromises that facilitates chaining of promises. The function should accept an array of functions that return promises and execute them sequentially.
 Instructions
-Implement a function called curry that takes two arguments:
-func: The function to be curried.
-arity: The number of arguments the original function takes.
-The curry function should return a new curried function.
-The curried function should keep accepting arguments until it has received the specified number of arguments (arity). Once all arguments are received, the original function should be executed with the collected arguments.
-If the curried function is invoked with fewer arguments than arity, it should return a new curried function that waits for the remaining arguments.
+Implement a function called chainPromises that takes an array of functions as an argument.
+Each function in the array should return a promise.
+The chainPromises function should execute the functions sequentially, chaining the promises together.
+The returned promise should resolve with the value of the last resolved promise or reject with the reason of the first rejected promise.
 Example
-```
-function multiply(a, b, c) {
-	return a * b * c;
+```JavaScript
+function asyncFunction1() {
+  return Promise.resolve("Result from asyncFunction1");
 }
 
-const curriedMultiply = curry(multiply, 3);
+function asyncFunction2(data) {
+  return Promise.resolve(data + " - Result from asyncFunction2");
+}
 
-const step1 = curriedMultiply(2); // Returns a curried function
-const step2 = step1(3); // Returns a curried function
-const result = step2(4); // Returns the final result: 2 * 3 * 4 = 24
+function asyncFunction3(data) {
+  return Promise.resolve(data + " - Result from asyncFunction3");
+}
 
-console.log("Result:", result); // Expected: 24
+const functionsArray = [asyncFunction1, asyncFunction2, asyncFunction3];
+
+chainPromises(functionsArray)
+  .then(result => {
+    console.log("Chained promise result:", result);
+    // Expected: "Result from asyncFunction1 - Result from asyncFunction2 - Result from asyncFunction3"
+  })
+  .catch(error => {
+    console.error("Chained promise error:", error);
+  });
 ```
-## Challenge (optional)
-Extend your currying function to allow partial application. Implement a special symbol (e.g., _) that represents a placeholder for missing arguments. The curried function should be able to accept arguments in any order, while placeholders are used for missing arguments.
+
+## Task 4: Implement promisify Function
+Your task is to implement a function called promisify that converts a callback-style function into a function that returns a promise.
+Instructions
+Implement a function called promisify that takes a callback-style function as an argument.
+The promisify function should return a new function that returns a promise.
+The new function should execute the original callback-style function and resolve the promise with its result or reject the promise with any error encountered.
+Example
+```JavaScript
+function callbackStyleFunction(value, callback) {
+  setTimeout(() => {
+    if (value > 0) {
+      callback(null, value * 2);
+    } else {
+      callback("Invalid value", null);
+    }
+  }, 1000);
+}
+
+const promisedFunction = promisify(callbackStyleFunction);
+
+promisedFunction(3)
+  .then(result => {
+    console.log("Promised function result:", result); // Expected: 6
+  })
+  .catch(error => {
+    console.error("Promised function error:", error);
+  });
+```
