@@ -11,6 +11,8 @@ class Bookstore {
         this.fillBooksTable(booksList);
         this.fillUsersTable(usersList);
     }
+
+    // Method to create tables in the database
     createBookStoreTables(){
         this.db.serialize(() => {
             this.db.run(`CREATE TABLE IF NOT EXISTS books (
@@ -42,7 +44,7 @@ class Bookstore {
                 FOREIGN KEY (userId) REFERENCES users(userId)
             )`);
         });}
-
+        // Method to fill books table with data
         fillBooksTable(bookList){
             const stmt = this.db.prepare('INSERT INTO books (title, author, isbn, price, availability) VALUES (?, ?, ?, ?, ?)');
             bookList.forEach((book) => {
@@ -50,6 +52,7 @@ class Bookstore {
             });
             stmt.finalize();
         };
+        // Method to fill users table with data
         fillUsersTable(usersList){
             const stmt = this.db.prepare('INSERT INTO users (userId, name, email) VALUES (?, ?, ?)');
             usersList.forEach((user) => {
@@ -59,7 +62,7 @@ class Bookstore {
         }
     }
 
-
+// Book class model
 class Book {
     constructor(title, author, isbn, price, availability) {
         this.title = title;
@@ -68,62 +71,38 @@ class Book {
         this.price = price;
         this.availability = availability;
     }
+    // Method to display book details
     getBookInfo() {
         return `${this.title} by ${this.author} is available for $${this.price}. ISBN: ${this.isbn}`;
     }
 }
-
+// User class model
 class User {
     constructor(name, email, userId) {
         this.name = name;
         this.email = email;
         this.userId = userId;
     }
+    // Method to display user details
     getUserInfo() {
         return `${this.name} has an account under ${this.email}`;
     }
 }
-// Add functionality in Main.js that transforms data received from db into instances of Cart, and Order
+// Cart class model
 class Cart {
     constructor(user) {
         this.user = user;
         this.cart = [];
     }
-
-    addBook(book) {
-        this.cart.push(book);
-        console.log(`Added a book ${book.title} to the cart!`)
-    }
-
-    removeBook(book) {
-        this.cart = this.cart.filter((cartBook) => cartBook.isbn !== book.isbn);
-        console.log(`Removed a book ${book.title} from the cart!`)
-    }
-
-    getCart() {
-        return this;
-    }
-
-    getTotal() {
-        return this.cart.reduce((total, book) => total + book.price, 0);
-    }
 }
-
+// Order class model
 class Order {
     constructor(user) {
         this.user = user;
         this.cart = findUserCart(user.userId);
         this.total = this.getTotals(this.cart);
     }
-
-    findUserCart(userId) {
-        
-    }
-
-    getTotals(cart) {
-        return cart.getTotal();
-    
-    }
+    // Method to display order details
     getOrderInfo() {
         return `Order placed by ${this.userId} for $${this.total}`;
     }

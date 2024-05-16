@@ -13,22 +13,22 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
     try {
         // >>> Simulating setting active user
         const activeUser = await bookstoreManager.setActiveUser('JD123');
-        console.log(`${activeUser.name} is now logged in`);
+        // console.log(`${activeUser.name} is now logged in`);
 
         // Setting second user - for testing purposes
-        const secondUser = await bookstoreManager.setActiveUser('JS456');
-        console.log(`${secondUser.name} is now logged in`);
+        // const secondUser = await bookstoreManager.setActiveUser('JS456');
+        // console.log(`${secondUser.name} is now logged in`);
         // -----------------------------------------------------
         // >>> Simulating selecting books
         const selectedBook = await bookstoreManager.setSelectedBook('9780060935467');
         // console.log(selectedBook);
         const selectedBook2 = await bookstoreManager.setSelectedBook('9780451524935');
-        const selectedBook3 = await bookstoreManager.setSelectedBook('9780590353427');
-        const selectedBook4 = await bookstoreManager.setSelectedBook('9780316769488');
+        // const selectedBook3 = await bookstoreManager.setSelectedBook('9780590353427');
+        // const selectedBook4 = await bookstoreManager.setSelectedBook('9780316769488');
         // -----------------------------------------------------
         // >>> Simulating adding books to cart
-        // await bookstoreManager.addBookToCart(activeUser, selectedBook);
-        // await bookstoreManager.addBookToCart(activeUser, selectedBook2);
+        await bookstoreManager.addBookToCart(activeUser, selectedBook);
+        await bookstoreManager.addBookToCart(activeUser, selectedBook2);
         // await bookstoreManager.addBookToCart(activeUser, selectedBook3);
         // await bookstoreManager.addBookToCart(activeUser, selectedBook4);
 
@@ -40,19 +40,14 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // await bookstoreManager.removeBookFromCart(activeUser, 1);
         // -----------------------------------------------------
         // >>> Simulating retrieving information about current items in cart for active user - info as is in db
-        // const cart = await bookstoreManager.getCart(activeUser);
+        const cart = await bookstoreManager.getCart(activeUser);
         // console.log(cart);
+        // console.log(typeof cart);
         // const secondCart = await bookstoreManager.getCart(secondUser);
         // console.log(secondCart);
         // -----------------------------------------------------
-        // >>> Simulating retrieving all information about books in cart
-        // const visualCart = await bookstoreManager.getCartVisual(activeUser);
-        // console.log(visualCart);
-        // const secondVisualCart = await bookstoreManager.getCartVisual(secondUser);
-        // console.log(secondVisualCart);
-        // -----------------------------------------------------
         // >>> Simulating getting total cost of cart
-        // const total = await bookstoreManager.getTotalCostOfCart(activeUser);
+        const total = await bookstoreManager.getTotalCostOfCart(activeUser);
         // console.log(total);
         // const secondTotal = await bookstoreManager.getTotalCostOfCart(secondUser);
         // console.log(secondTotal);
@@ -61,10 +56,10 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // await bookstoreManager.clearCart(activeUser);
         // -----------------------------------------------------
         // >>> Simulating placing an order
-        // await bookstoreManager.createOrder(activeUser);
+        await bookstoreManager.createOrder(activeUser);
         // -----------------------------------------------------
         // >>> Simulating getting all orders for user
-        // const orders = await bookstoreManager.getOrder(activeUser);
+        const orders = await bookstoreManager.getOrder(activeUser);
         // console.log(orders);
     } catch (error) {
         console.error(error);
