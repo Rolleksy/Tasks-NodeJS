@@ -27,6 +27,41 @@ Represents a book available in the bookstore.
         - getAvailability(): Returns the availability status of the book.
         - toString(): Displays the details of the book including title, author, price, and ISBN.
 
+1.1.1. **Book Subclasses**
+
+- **ElectronicBook**
+
+Represents a book available in the bookstore in EBook format.
+
+    Properties:
+        - title (string): Title of the book.
+        - author (string): Author of the book.
+        - price (number): Price of the book.
+        - isbn (string): ISBN (International Standard Book Number) of the book.
+        - availability (boolean): Availability status of the book.
+    Extended properties:
+        - format (string): Format of Ebook file.
+    Methods:
+        - toString(): Displays the details of the book including title, author, price, ISBN and Format.
+        - getFormat(): Returns the format of ebook.
+
+- **AudioBook**
+
+Represents an audiobook available in bookstore.
+
+    Properties:
+       - title (string): Title of the book.
+        - author (string): Author of the book.
+        - price (number): Price of the book.
+        - isbn (string): ISBN (International Standard Book Number) of the book.
+        - availability (boolean): Availability status of the book.
+    Extended properties:
+        - audioLength (string): Length of an audiobook.
+    Methods:
+        - toString(): Displays the details about audiobook including title, author, price, ISBN and Length.
+        - getAudioLength(): Returns length of an audiobook.
+
+
 1.2. **User**
 
 Represents a user of the bookstore.
@@ -66,7 +101,6 @@ Represents an order made by a user.
     Methods:
         - createListFromCart(cart): Creates a list of books from the user's cart.
         - toString(): Displays the ordered items in a concise format.
-        - calculateTotalPrice(): Calculates the total price of items in the order.
         - applyDiscount(discountPercentage): Applies a discount to the order based on the given percentage.
 
 

@@ -33,17 +33,17 @@ class Book {
         console.log(`${this.title} by ${this.author} - $${this.price}. ISBN: ${this.isbn}`);
     }
 }
-// Subclass of Book - PaperBook
-class PaperBook extends Book {
-    constructor(title, author, price, isbn, availability, pageNumber) {
+// Subclass of Book - AudioBook
+class AudioBook extends Book {
+    constructor(title, author, price, isbn, availability, audioLength) {
         super(title, author, price, isbn, availability);
-        this.pageNumber = pageNumber;
+        this.audioLength = audioLength;
     }
-    getPageNumber() {
-        return this.pageNumber;
+    getAudioLength() {
+        return this.audioLength;
     }
     toString(){
-        console.log(`This is ${this.constructor.name} version of: ${this.title} by ${this.author} - $${this.price}. ISBN: ${this.isbn}, Pages: ${this.pageNumber}`);
+        console.log(`This is ${this.constructor.name} version of: ${this.title} by ${this.author} - $${this.price}. ISBN: ${this.isbn}, Length: ${this.audioLength}`);
     }
 }
 
@@ -117,6 +117,7 @@ class Cart {
 class Order {
     constructor(user, cart) {
         this.user = user;
+        this.cart = cart;
         this.items = this.createListFromCart(cart);
         this.totalPrice = cart.calculateTotalPrice();
     }
@@ -148,7 +149,7 @@ module.exports = { Book, User, Cart, Order };
 // Creating instances of books and a user
 const book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 15.99, "978075", true);
 const book2 = new Book("To Kill a Mockingbird", "Harper Lee", 12.99, "978006", true);
-const book3 = new PaperBook("1984", "George Orwell", 14.99, "978045", true, 328);
+const book3 = new AudioBook("1984", "George Orwell", 14.99, "978045", true, "10 hours");
 const book4 = new ElectronicBook("Pride and Prejudice", "Jane Austen", 9.99, "978014", true, "PDF");
 
 const user1 = new User("Alice", "alice@example.com", "AL123");
