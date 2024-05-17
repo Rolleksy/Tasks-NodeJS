@@ -32,6 +32,26 @@ class BookstoreManager {
             console.error(`Error removing user ${user.name} from the database: ${error}`);
         }
     }
+    // Method to simulate a user paying for an order
+    async payForOrder(user) {
+        try {
+            const order = await this.getOrder(user);
+            console.log(`Payment completed.`);
+            this.processPayment(user);
+        } catch (error) {
+            console.error(`Error encountered while paying for order: ${error}`);
+        }
+    }
+    // Method to simulate processing a payment - it clears a cart after successful payment
+    async processPayment(user) {
+        try {
+            const total = await this.getTotalCostOfCart(user);
+            console.log(`Payment processed for ${user.name}`);
+            await this.clearCart(user);
+        } catch (error) {
+            console.error(`Error processing payment for user ${user.name}: ${error}`);
+        }
+    }
     // -----------------------------------------------------
     // BOOK METHODS
     // Methods to add and remove books
@@ -55,6 +75,29 @@ class BookstoreManager {
             console.log(`Book ${book.title} removed from the database!`);
         } catch (error) {
             console.error(`Error removing book ${book.title} from the database: ${error}`);
+        }
+    }
+    // Method to search a book
+    async searchBooks(query) {
+        try {
+            const qry = this.db.prepare('SELECT * FROM books WHERE title LIKE ? OR author LIKE ?');
+            const books = await new Promise((resolve, reject) => {
+                qry.all(`%${query}%`, `%${query}%`, (err, rows) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(rows);
+                    }
+                });
+            });
+            qry.finalize();
+            console.log(`Books found for query: ${query}`)
+            books.forEach(element => {
+                console.log(`Author: ${element.author}, Title: ${element.title}, Price: ${element.price}, is available: ${element.availability ? 'Yes' : 'No'}`)
+            });
+            return books;
+        } catch (error) {
+            console.error(`Error searching books: ${error}`);
         }
     }
 
@@ -191,6 +234,30 @@ class BookstoreManager {
             return order;
         } catch (error) {
             console.error(`Error getting order for user ${user.name}: ${error}`);
+        }
+    }
+    // Method to apply a discount to an order
+    async applyDiscount(user, percentage) {
+        try {
+            const qry = this.db.prepare('SELECT * FROM orders WHERE userId = ?');
+            const order = await new Promise((resolve, reject) => {
+                qry.get(user.userId, (err, row) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(row);
+                    }
+                });
+            });
+            qry.finalize();
+            const total = order.total;
+            const discount = total * (percentage / 100);
+            const finalTotal = total - discount;
+            console.log(`Discount of ${percentage}% applied to order for ${user.name}`);
+            console.log(`Total before discount: $${total}`);
+            console.log(`Total after discount: $${finalTotal}`);
+        } catch (error) {
+            console.error(`Error applying discount to order for user ${user.name}: ${error}`);
         }
     }
 

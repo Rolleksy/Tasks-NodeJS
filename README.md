@@ -211,8 +211,11 @@ Abstraction used to improve visibility and clarify code. Class creates connectio
     Methods:
         - addUser(user): Adds object type of User to DB.
         - removeUser(user): Removes object type of User from DB.
+        - payForOrder(user): Simulates user paying for order and invokes payment processing method.
+        - processPayment(user): Simulates processing payment and clears a cart if successful.
         - addBook(book): Adds object type of Book to DB.
         - removeBook(book): Removes object type of Book from DB.
+        - searchBooks(query): Retrieves list of items that contains query in title or authors name
         - getBookById(id): Finds book in DB searching by its ID.
         - addBookToCart(user, book): Adds information about userId and bookId to table Carts.
         - removeBookFromCart(user, id): Removes information about selected book and user from Carts.
@@ -230,6 +233,8 @@ Abstraction used to improve visibility and clarify code. Class creates connectio
 
 - Selecting logged in user by:
 `const activeUser = await bookstoreManager.setActiveUser('JD123');`
+- Simulating searching for a book:
+`const searchBook = await bookstoreManager.searchBooks('Harry Potter');`
 - Selecting books:
 `const selectedBook = await bookstoreManager.setSelectedBook('9780060935467');`
 - Adding books to the cart by:

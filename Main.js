@@ -19,6 +19,12 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // const secondUser = await bookstoreManager.setActiveUser('JS456');
         // console.log(`${secondUser.name} is now logged in`);
         // -----------------------------------------------------
+        // Simulating searching for books
+        // const searchBook = await bookstoreManager.searchBooks('Harry Potter');
+        // console.log(searchBook);
+        // const searchBook2 = await bookstoreManager.searchBooks('Orwell');
+        // console.log(searchBook2);
+        // -----------------------------------------------------
         // >>> Simulating selecting books
         const selectedBook = await bookstoreManager.setSelectedBook('9780060935467');
         // console.log(selectedBook);
@@ -27,8 +33,8 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // const selectedBook4 = await bookstoreManager.setSelectedBook('9780316769488');
         // -----------------------------------------------------
         // >>> Simulating adding books to cart
-        await bookstoreManager.addBookToCart(activeUser, selectedBook);
-        await bookstoreManager.addBookToCart(activeUser, selectedBook2);
+        // await bookstoreManager.addBookToCart(activeUser, selectedBook);
+        // await bookstoreManager.addBookToCart(activeUser, selectedBook2);
         // await bookstoreManager.addBookToCart(activeUser, selectedBook3);
         // await bookstoreManager.addBookToCart(activeUser, selectedBook4);
 
@@ -60,6 +66,15 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // -----------------------------------------------------
         // >>> Simulating getting all orders for user
         const orders = await bookstoreManager.getOrder(activeUser);
+
+        // >>> Simulating payment
+        await bookstoreManager.payForOrder(activeUser);
+
+        // Checking cart after payment
+        const cartAfterPayment = await bookstoreManager.getCart(activeUser);
+        console.log(cartAfterPayment);
+
+        
         // console.log(orders);
     } catch (error) {
         console.error(error);
