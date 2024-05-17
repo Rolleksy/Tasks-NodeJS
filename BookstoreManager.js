@@ -236,10 +236,10 @@ class BookstoreManager {
             console.error(`Error getting order for user ${user.name}: ${error}`);
         }
     }
-    // Method to apply a discount to an order
-    async applyDiscount(user, percentage) {
+    // Method used to get the last order - used in the applyDiscount method
+    async getLastOrder(user) {
         try {
-            const qry = this.db.prepare('SELECT * FROM orders WHERE userId = ?');
+            const qry = this.db.prepare('SELECT * FROM orders WHERE userId = ? ORDER BY id DESC LIMIT 1');
             const order = await new Promise((resolve, reject) => {
                 qry.get(user.userId, (err, row) => {
                     if (err) {
@@ -250,14 +250,34 @@ class BookstoreManager {
                 });
             });
             qry.finalize();
+            return order;
+        } catch (error) {
+            console.error(`Error getting the latest order: ${error}`);
+        }
+    }
+    // Method to apply a discount to an order
+    async applyDiscount(user, percentage) {
+        try {
+            const order = await this.getLastOrder(user);
             const total = order.total;
             const discount = total * (percentage / 100);
-            const finalTotal = total - discount;
-            console.log(`Discount of ${percentage}% applied to order for ${user.name}`);
-            console.log(`Total before discount: $${total}`);
-            console.log(`Total after discount: $${finalTotal}`);
+            const newTotal = total - discount;
+            console.log(`Discount of ${percentage}% applied to ${user.name}'s order. New total: $${newTotal}`);
+            await this.updateOrderTotal(order.id, newTotal);
+            return newTotal;
         } catch (error) {
-            console.error(`Error applying discount to order for user ${user.name}: ${error}`);
+            console.error(`Error applying discount for user ${user.name}: ${error}`);
+        }
+    }
+    // Method to update the total price of an order
+    async updateOrderTotal(orderId, newTotal) {
+        try {
+            const qry = this.db.prepare('UPDATE orders SET total = ? WHERE id = ?');
+            qry.run(newTotal, orderId);
+            qry.finalize();
+            console.log(`Order total price updated to $${newTotal} for order ID ${orderId}`);
+        } catch (error) {
+            console.error(`Error updating order total price for order ID ${orderId}: ${error}`);
         }
     }
 

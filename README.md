@@ -224,6 +224,9 @@ Abstraction used to improve visibility and clarify code. Class creates connectio
         - clearCart(user): Clears cart of selected user.
         - createOrder(user): Creates order for selected user.
         - getOrder(user): Retrieves order for selected user.
+        - getLastOrder(user): Retrieves latest order for selected user - used in discount method.
+        - applyDiscount(user, percentage): Applies discount based on percentage and updates order in db
+        - updateOrderTotal(orderId, newTotal): Updates new total price for order.
         - setActiveUser(userId): For simulation purposes retrieves info about active user. Simulates logging in.
         - setSelectedBook(isbn): For simulation purposes retrieves info about selected book. Simulates user selecting book.
 

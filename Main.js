@@ -29,13 +29,13 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         const selectedBook = await bookstoreManager.setSelectedBook('9780060935467');
         // console.log(selectedBook);
         const selectedBook2 = await bookstoreManager.setSelectedBook('9780451524935');
-        // const selectedBook3 = await bookstoreManager.setSelectedBook('9780590353427');
+        const selectedBook3 = await bookstoreManager.setSelectedBook('9780590353427');
         // const selectedBook4 = await bookstoreManager.setSelectedBook('9780316769488');
         // -----------------------------------------------------
         // >>> Simulating adding books to cart
-        // await bookstoreManager.addBookToCart(activeUser, selectedBook);
-        // await bookstoreManager.addBookToCart(activeUser, selectedBook2);
-        // await bookstoreManager.addBookToCart(activeUser, selectedBook3);
+        await bookstoreManager.addBookToCart(activeUser, selectedBook);
+        await bookstoreManager.addBookToCart(activeUser, selectedBook2);
+        await bookstoreManager.addBookToCart(activeUser, selectedBook3);
         // await bookstoreManager.addBookToCart(activeUser, selectedBook4);
 
         // // >>> Simulating second user adding books to cart
@@ -67,14 +67,17 @@ const bookstoreManager = new BookstoreManager.BookstoreManager(db);
         // >>> Simulating getting all orders for user
         const orders = await bookstoreManager.getOrder(activeUser);
 
+        // >>> Simulating applying discount
+        await bookstoreManager.applyDiscount(activeUser, 10);
+        
         // >>> Simulating payment
-        await bookstoreManager.payForOrder(activeUser);
+        // await bookstoreManager.payForOrder(activeUser);
 
         // Checking cart after payment
-        const cartAfterPayment = await bookstoreManager.getCart(activeUser);
-        console.log(cartAfterPayment);
+        // const cartAfterPayment = await bookstoreManager.getCart(activeUser);
+        // console.log(cartAfterPayment);
 
-        
+
         // console.log(orders);
     } catch (error) {
         console.error(error);
