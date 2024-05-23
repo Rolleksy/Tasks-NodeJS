@@ -1,56 +1,54 @@
+// Stack class - LIFO
 class Stack {
     constructor() {
         this.stack = [];
     }
 
+    // Adds an element to the top of the stack
     push(value) {
-        if (this.stack.length === 0) {
-            this.stack[0] = value;
-            return;
-        }
-        for (let i = this.stack.length - 1; i >= 0; i--) {
-            this.stack[i + 1] = this.stack[i];
-        }
-        this.stack[0] = value;
+        this.stack.push(value);
     }
 
+    // Removes and returns the top element from the stack
     pop() {
-        let popVal = this.stack[0];
-        this.stack.forEach((val, index) => {
-            this.stack[index] = this.stack[index + 1];
-        });
-        this.stack.length = this.stack.length - 1;
-        return popVal;
+        return this.stack.pop();
     }
 
+    // Returns the top element from the stack without removing it
     peek() {
-        return this.stack[0];
+        return this.stack[this.stack.length - 1];
     }
 
+    // Checks if the stack is empty
     isEmpty() {
         return this.stack.length === 0;
     }
 
+    // Returns the number of elements in the stack
     size() {
         return this.stack.length;
     }
 }
+// MinMaxStack class - helps to get min and max values from the stack
 class MinMaxStack {
     constructor() {
-        this.stack = new Stack();
-        this.minStack = new Stack();
-        this.maxStack = new Stack();
+        this.stack = [];
+        this.minStack = [];
+        this.maxStack = [];
     }
 
+    // Adds an element to the stack
     push(value) {
         this.stack.push(value);
 
+        // Updates the minStack with the minimum value so far
         if (this.minStack.length === 0 || value <= this.getMin()) {
             this.minStack.push(value);
         } else {
             this.minStack.push(this.getMin());
         }
 
+        // Updates the maxStack with the maximum value so far
         if (this.maxStack.length === 0 || value >= this.getMax()) {
             this.maxStack.push(value);
         } else {
@@ -58,6 +56,7 @@ class MinMaxStack {
         }
     }
 
+    // Removes and return the top element from the stack
     pop() {
         if (this.stack.length === 0) {
             throw new Error("Stack is empty");
@@ -67,6 +66,7 @@ class MinMaxStack {
         return this.stack.pop();
     }
 
+    // Returns the minimum value in the stack
     getMin() {
         if (this.minStack.length === 0) {
             throw new Error("Stack is empty");
@@ -74,6 +74,7 @@ class MinMaxStack {
         return this.minStack[this.minStack.length - 1];
     }
 
+    // Returns the maximum value in the stack
     getMax() {
         if (this.maxStack.length === 0) {
             throw new Error("Stack is empty");
@@ -82,11 +83,13 @@ class MinMaxStack {
     }
 }
 
+// Queue class - FIFO
 class Queue {
     constructor() {
         this.queue = [];
     }
 
+    // Adds an element to the end of the queue
     enqueue(value) {
         if (this.queue.length === 0) {
             this.queue[0] = value;
@@ -95,6 +98,7 @@ class Queue {
         this.queue[this.queue.length] = value;
     }
 
+    // Removes and return the first element from the queue
     dequeue() {
         let dequeuedVal = this.queue[0];
         this.queue.forEach((val, index) => {
@@ -104,19 +108,24 @@ class Queue {
         return dequeuedVal;
     }
 
+    // Returns the first element from the queue without removing it
     peek() {
         return this.queue[0];
     }
 
+    // Checks if the queue is empty
     isEmpty() {
         return this.queue.length === 0;
     }
 
+    // Returns the number of elements in the queue
     size() {
         return this.queue.length;
     }
 }
 
+// Binary Tree class
+// Node class to represent the nodes in the binary tree
 class BTNode {
     constructor(key, value, parent = null) {
         this.key = key;
@@ -126,10 +135,12 @@ class BTNode {
         this.parent = parent;
     }
 
+    // Checks if the node is a leaf node (has no children)
     get isLeaf() {
         return this.left === null && this.right === null;
     }
 
+    // Checks if the node has any children
     get hasChildren() {
         return !this.isLeaf;
     }
@@ -139,6 +150,7 @@ class BinaryTree {
         this.root = new BTNode(key, value);
     }
 
+    // Performs in-order traversal of the binary tree
     inOrderTraversal(node = this.root) {
         const result = [];
         const stack = [];
@@ -157,6 +169,7 @@ class BinaryTree {
         return result;
     }
 
+    // Performs post-order traversal of the binary tree
     postOrderTraversal(node = this.root) {
         const result = [];
         const stack = [node];
@@ -176,6 +189,7 @@ class BinaryTree {
         return result;
     }
 
+    // Performs pre-order traversal of the binary tree
     preOrderTraversal(node = this.root) {
         const result = [];
         const stack = [node];
@@ -190,31 +204,35 @@ class BinaryTree {
         return result;
     }
 
-    insert(parentNodeKey, key, value = key, {
-        left,
-        right
-    } = {
-        left: true,
-        right: true
-    }) {
-        for (let node of this.preOrderTraversal()) {
-            if (node.key === parentNodeKey) {
-                const canInsertLeft = left && node.left === null;
-                const canInsertRight = right && node.right === null;
-                if (!canInsertLeft && !canInsertRight) return false;
-                if (canInsertLeft) {
-                    node.left = new BTNode(key, value, node);
-                    return true;
-                }
-                if (canInsertRight) {
-                    node.right = new BTNode(key, value, node);
-                    return true;
-                }
+    // Inserts a new node into the binary tree
+    insert(key, value = key) {
+        const newNode = new BTNode(key, value);
+        const queue = [this.root];
+
+        while (queue.length > 0) {
+            const current = queue.shift();
+
+            if (!current.left) {
+                current.left = newNode;
+                newNode.parent = current;
+                return true;
+            } else {
+                queue.push(current.left);
+            }
+
+            if (!current.right) {
+                current.right = newNode;
+                newNode.parent = current;
+                return true;
+            } else {
+                queue.push(current.right);
             }
         }
+
         return false;
     }
 
+    // Removes a node from the binary tree
     remove(key) {
         for (let node of this.preOrderTraversal()) {
             if (node.left && node.left.key === key) {
@@ -229,6 +247,7 @@ class BinaryTree {
         return false;
     }
 
+    // Finds a node in the binary tree
     find(key) {
         for (let node of this.preOrderTraversal()) {
             if (node.key === key) return node;
@@ -236,6 +255,7 @@ class BinaryTree {
         return undefined;
     }
 
+    // Checks if the binary tree is a binary search tree (BST)
     isBST() {
         return this.isBSTFunction(this.root, null, null);
     }
@@ -249,17 +269,20 @@ class BinaryTree {
     }
 }
 
+// Graph class
 class Graph {
     constructor() {
         this.adjacencyList = {};
     }
 
+    // Adds a vertex to the graph
     addVertex(vertex) {
         if (!this.adjacencyList[vertex]) {
             this.adjacencyList[vertex] = [];
         }
     }
 
+    // Adds an edge between two vertices in the graph
     addEdge(vertex1, vertex2, weight = 1) {
         this.adjacencyList[vertex1].push({
             node: vertex2,
@@ -271,6 +294,7 @@ class Graph {
         });
     }
 
+    // Removes an edge between two vertices in the graph
     removeEdge(vertex1, vertex2) {
         this.adjacencyList[vertex1] = this.adjacencyList[vertex1].filter(
             v => v.node !== vertex2
@@ -280,6 +304,7 @@ class Graph {
         );
     }
 
+    // Removes a vertex from the graph
     removeVertex(vertex) {
         while (this.adjacencyList[vertex].length) {
             const adjacentVertex = this.adjacencyList[vertex].pop().node;
@@ -288,6 +313,7 @@ class Graph {
         delete this.adjacencyList[vertex];
     }
 
+    // Performs depth-first search (DFS) on the graph
     depthFirstSearch(start) {
         const result = [];
         const visited = {};
@@ -307,6 +333,7 @@ class Graph {
         return result;
     }
 
+    // Performs breadth-first search (BFS) on the graph
     breadthFirstSearch(start) {
         const queue = [start];
         const result = [];
@@ -330,100 +357,107 @@ class Graph {
         return result;
     }
 
+    // Finds the shortest path between two vertices using Dijkstra's algorithm - weighted graph
     dijkstra(start, end) {
-        const distances = {};
-        const priorityQueue = new PriorityQueue();
-        const previous = {};
-        const path = [];
-        let smallest;
+        const distances = {}; // Object to store the shortest distance to each vertex
+        const priorityQueue = new PriorityQueue(); // Priority queue to manage the next vertex to process
+        const previous = {}; // Object to store the previous vertex in the shortest path
+        const path = []; // Array to store the shortest path
+        let smallest; // Variable to hold the current vertex with the smallest distance
 
-        // Initialize distances and priority queue
+        // Initializes distances and priority queue
         for (let vertex in this.adjacencyList) {
             if (vertex === start) {
-                distances[vertex] = 0;
-                priorityQueue.enqueue(vertex, 0);
+                distances[vertex] = 0; // Distance to the start vertex is 0
+                priorityQueue.enqueue(vertex, 0); // Enqueue start vertex with priority 0
             } else {
-                distances[vertex] = Infinity;
-                priorityQueue.enqueue(vertex, Infinity);
+                distances[vertex] = Infinity; // Distance to all other vertices is Infinity
+                priorityQueue.enqueue(vertex, Infinity); // Enqueue other vertices with priority Infinity
             }
-            previous[vertex] = null;
+            previous[vertex] = null; // No previous vertex for any vertex initially
         }
 
+        // Loop until there are vertices in the priority queue
         while (priorityQueue.values.length) {
-            smallest = priorityQueue.dequeue().val;
+            smallest = priorityQueue.dequeue().val; // Dequeue vertex with the smallest distance
 
             if (smallest === end) {
+                // Reconstructs the shortest path
                 while (previous[smallest]) {
-                    path.push(smallest);
-                    smallest = previous[smallest];
+                    path.push(smallest); // Push the vertex to the path
+                    smallest = previous[smallest]; // Move to the previous vertex
                 }
-                break;
+                break; // Exit loop when the end vertex is reached
             }
 
             if (smallest || distances[smallest] !== Infinity) {
+                // Updates distances and previous for neighboring vertices
                 this.adjacencyList[smallest].forEach(neighbor => {
-                    let candidate = distances[smallest] + neighbor.weight;
-                    let nextNeighbor = neighbor.node;
+                    let candidate = distances[smallest] + neighbor.weight; // Calculate new distance to neighbor
+                    let nextNeighbor = neighbor.node; // Get neighbor vertex
 
                     if (candidate < distances[nextNeighbor]) {
-                        distances[nextNeighbor] = candidate;
-                        previous[nextNeighbor] = smallest;
-                        priorityQueue.enqueue(nextNeighbor, candidate);
+                        distances[nextNeighbor] = candidate; // Update distance to neighbor
+                        previous[nextNeighbor] = smallest; // Update previous vertex for neighbor
+                        priorityQueue.enqueue(nextNeighbor, candidate); // Enqueue neighbor with new priority
                     }
                 });
             }
         }
 
-        return path.concat(smallest).reverse();
+        return path.concat(smallest).reverse(); // Return the shortest path in the correct order
     }
 
+    // Finds the shortest path between two vertices using breadth-first search (BFS)
     bfsShortestPath(start, end) {
-        const queue = [start];
+        const queue = [start]; // Queue to manage the vertices to process
         const visited = {
             [start]: true
-        };
-        const previous = {};
-        let current;
+        }; // Object to track visited vertices
+        const previous = {}; // Object to store the previous vertex in the shortest path
+        let current; // Variable to hold the current vertex being processed
 
+        // Loop until there are vertices in the queue
         while (queue.length) {
-            current = queue.shift();
+            current = queue.shift(); // Dequeue the first vertex
 
             if (current === end) {
-                const pathStack = new Stack();
+                // Reconstructs the shortest path
+                const pathStack = new Stack(); // Stack to store the path in reverse order
                 while (current !== start) {
-                    pathStack.push(current);
-                    current = previous[current];
+                    pathStack.push(current); // Push the vertex to the stack
+                    current = previous[current]; // Move to the previous vertex
                 }
-                pathStack.push(start);
+                pathStack.push(start); // Push the start vertex to the stack
 
-                const path = [];
+                const path = []; // Array to store the shortest path
                 while (!pathStack.isEmpty()) {
-                    path.push(pathStack.pop());
+                    path.push(pathStack.pop()); // Pop vertices from the stack to get the path in correct order
                 }
-                return path;
+                return path; // Return the shortest path
             }
 
+            // Process all neighbors of the current vertex
             this.adjacencyList[current].forEach(neighbor => {
                 if (!visited[neighbor.node]) {
-                    visited[neighbor.node] = true;
-                    previous[neighbor.node] = current;
-                    queue.push(neighbor.node);
+                    visited[neighbor.node] = true; // Mark neighbor as visited
+                    previous[neighbor.node] = current; // Set previous vertex for neighbor
+                    queue.push(neighbor.node); // Enqueue neighbor
                 }
             });
         }
 
-        return [];
+        return []; // Return empty path if no path is found
     }
 
-
-
-
 }
+// Priority Queue class - helps to get the element with the highest priority
 class PriorityQueue {
     constructor() {
         this.values = [];
     }
 
+    // Adds an element to the priority queue with a priority
     enqueue(val, priority) {
         this.values.push({
             val,
@@ -432,15 +466,19 @@ class PriorityQueue {
         this.sort();
     }
 
+    // Removes and returns the element with the highest priority from the priority queue
     dequeue() {
         return this.values.shift();
     }
 
+    // Sorts the elements in the priority queue based on their priorities
     sort() {
         this.values.sort((a, b) => a.priority - b.priority);
     }
 }
 
+// Linked List Class - Singly Linked List
+// Node class to represent the nodes in the linked list
 class ListNode {
     constructor(value) {
         this.value = value;
@@ -452,6 +490,7 @@ class LinkedList {
         this.head = null;
     }
 
+    // Inserts a node at the end of the linked list
     insertNode(value) {
         const newNode = new ListNode(value);
         if (!this.head) {
@@ -465,6 +504,7 @@ class LinkedList {
         }
     }
 
+    // Deletes a node from the linked list
     deleteNode(value) {
         if (!this.head) {
             console.log("List is empty, cannot delete node.");
@@ -488,8 +528,7 @@ class LinkedList {
         return false;
     }
 
-
-
+    // Searches for a node with a specific value in the linked list
     searchNode(value) {
         let current = this.head;
         while (current) {
@@ -501,6 +540,7 @@ class LinkedList {
         return null;
     }
 
+    // Prints the linked list
     printList() {
         const visited = new Set();
         let current = this.head;
@@ -522,7 +562,7 @@ class LinkedList {
         }
     }
 
-
+    // Checks if the linked list contains a cycle using Floyd's cycle detection algorithm
     cycleDetection() {
         let slow = this.head;
         let fast = this.head;
@@ -537,10 +577,8 @@ class LinkedList {
         }
 
         return false;
-
     }
 }
-
 
 module.exports = {
     Stack,

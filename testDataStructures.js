@@ -1,7 +1,7 @@
 const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./DataStructures');
 
 
-// ------------- Stack testing
+// ------------- Stack testing -------------
 // const stack = new Stack();
 
 // stack.push(1);
@@ -14,8 +14,11 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 // // console.log(poppedVal);
 
 // console.log(stack);
+// -------------------------------------------
 
-// ------------- Stack min/max testing
+
+
+// ------------- Stack min/max testing -------------
 
 // const stack = new MinMaxStack();
 // stack.push(5);
@@ -32,8 +35,12 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 // console.log("Popping", stack.pop()); // 1
 // console.log("Get min: ",stack.getMin()); // 3
 // console.log("Get max: ",stack.getMax()); // 8
+// -------------------------------------------
+// 
 
-// ------------- Queue testing
+
+
+// ------------- Queue testing -------------
 
 // const queue = new Queue();
 
@@ -48,8 +55,13 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 // console.log(dequeuedVal);
 
 // console.log(queue);
+// -------------------------------------------
 
-// ------------- Binary Tree testing
+
+
+
+
+// ------------- Binary Tree testing -------------
 
 // Creating instance of BinaryTree
 // const tree = new BinaryTree(10, 10);
@@ -96,8 +108,14 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 // console.log("Is this Tree a Binary Search Tree (BST)?");
 // console.log("Is BST:", tree.isBST() ? "Yes" : "No");
 
+// console.log(tree);
+// -------------------------------------------
 
-// -------------  Graph testing
+
+
+
+
+// -------------  Graph testing -------------
 
 // const graph = new Graph();
 
@@ -130,14 +148,18 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 
 // console.log("Shortest path according to BFS:");
 // console.log(graph.bfsShortestPath("A", "E")); // ["A", "B",  "E"]
+// -------------------------------------------
 
 
-// ------------- Linked List test
 
-// Creating instance of LinkedList
+
+
+// ------------- Linked List test -------------
+
+// // Creating instance of LinkedList
 // const list = new LinkedList();
 
-// Adding nodes to the list
+// // Adding nodes to the list
 // console.log("Adding nodes:");
 // list.insertNode("A");
 // list.insertNode("B");
@@ -146,11 +168,11 @@ const { Stack, MinMaxStack, Queue, BinaryTree, Graph, LinkedList } = require('./
 // list.insertNode("E");
 // list.insertNode("F");
 
-// Logging the list
+// // Logging the list
 // console.log("List after adding nodes:");
 // list.printList(); // A -> B -> C -> D -> E -> F
 
-// Looking for cycle in the list
+// // Looking for cycle in the list
 // console.log("Cycle detection:");
 // console.log(list.cycleDetection()); // Expecting false, because the list does not contain a cycle
 

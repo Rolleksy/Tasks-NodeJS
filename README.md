@@ -61,7 +61,7 @@ Binary Tree is a hierarchical data structure composed of nodes. Each node has tw
     - inOrderTraversal(node): Performs an in-order traversal of the tree starting from the given node, returning an array of nodes visited in order.
     - postOrderTraversal(node): Performs a post-order traversal of the tree starting from the given node, returning an array of nodes visited in order.
     - preOrderTraversal(node): Performs a pre-order traversal of the tree starting from the given node, returning an array of nodes visited in order.
-    - insert(parentNodeKey, key, value, { left, right }): Inserts a new node with the specified key and value as a child of the node with the given parent key. The left and right parameters determine whether the new node can be inserted as a left or right child.
+    - insert(key, value): Inserts a new node with the specified key and value.
     - remove(key): Removes the node with the specified key from the tree.
     - find(key): Finds and returns the node with the specified key.
     - isBST(): Checks whether the binary tree is a Binary Search Tree (BST), returning true if it satisfies the BST properties and false otherwise.
