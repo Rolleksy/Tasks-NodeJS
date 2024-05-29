@@ -45,15 +45,15 @@ Hash function converts a string into a hash value within the bounds of the hash 
 
 ## Linear Probing - Hash Table (LinearHashTable Class)
 
-**Constructor**(size):
-    - creates array of given size - defaults to 50
+    Constructor(size):
+        - creates array of given size - defaults to 50
 
-**Methods**: 
-    - hashFunction(str): Calculates the hash value of given string
-    - insert(key, value): Inserts a pair of key-value into the hash table using linear probing as collision resolution
-    - get(key): Retrieves value associated with given key
-    - delete(key): Deletes a key-value pair from hash table
-    - display(): Displays contents of the hash table
+    Methods: 
+        - hashFunction(str): Calculates the hash value of given string
+        - insert(key, value): Inserts a pair of key-value into the hash table using linear probing as collision resolution
+        - get(key): Retrieves value associated with given key
+        - delete(key): Deletes a key-value pair from hash table
+        - display(): Displays contents of the hash table
 
 ### How linear probing works?
 
@@ -73,15 +73,15 @@ insert(key, value) {
 
 ## Quadratic Probing - Hash Table (QuadHashTable Class)
 
-**Constructor**(size):
-    - creates array of given size
+    Constructor(size):
+        - creates array of given size
 
-**Methods**: 
-    - hashFunction(str): Calculates the hash value of given string
-    - insert(key, value): Inserts a pair of key-value into the hash table using quadratic probing as collision resolution
-    - get(key): Retrieves value associated with given key
-    - delete(key): Deletes a key-value pair from hash table
-    - display(): Displays contents of the hash table 
+    Methods: 
+        - hashFunction(str): Calculates the hash value of given string
+        - insert(key, value): Inserts a pair of key-value into the hash table using quadratic probing as collision resolution
+        - get(key): Retrieves value associated with given key
+        - delete(key): Deletes a key-value pair from hash table
+        - display(): Displays contents of the hash table 
 
 ### How Quadratic Probing works?
 
