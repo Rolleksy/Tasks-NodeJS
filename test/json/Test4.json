@@ -1,0 +1,7 @@
+{
+    "project": {
+        "name": "JSON Parser",
+        "type": "Library",
+        "language": "Javascript"
+    }
+}

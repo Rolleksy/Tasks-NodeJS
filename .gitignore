@@ -1,0 +1,55 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# dotenv environment variable files
+.env
+.env.test
+
+# MacOS system files
+.DS_Store
+
+# Logs
+logs
+*.log
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Optional coverage directory used by tools like istanbul
+coverage/
+
+# Optional transpilation cache
+lib-cov
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Output of 'npm pack', 'npm publish', and 'npm cache clean'
+*.tgz
+
+# Ignore build directories for different build tools
+dist/
+build/
+
+# Ignore temporary directories created by build tools
+.tmp/
+.temp/

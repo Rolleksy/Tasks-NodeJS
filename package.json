@@ -1,0 +1,16 @@
+{
+  "name": "my-jsonparser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "JsonParser.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "mocha": "^10.4.0",
+    "chai": "^5.1.1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
