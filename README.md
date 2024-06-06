@@ -88,3 +88,14 @@ Full code in file `ParserTests.test.mjs`
 
 
 >Run test with `npm test` command.
+
+
+### 4. Reflection
+
+The project aimed at testing my understanding of JSON syntax and the use of regular expressions (regex) to find patterns was highly educational. Initially, I focused on understanding the JSON syntax, which included identifying and comprehending the meaning of various characters and the data types they define.
+
+During the project, I realized that the string passed to the function had to be searched character by character. When a specific character such as `", -, 0, 9, t, f, n, [, {` was found, the appropriate function was called to find matches. The key was to develop these functions in a way that allowed for effective and efficient parsing and in cases of `parseString`, `parseNumber`, `parseLiteral` and `trim` using regular expressions.
+
+While creating the functions that used regex, visualization tools for regular expressions found in web, proved to be extremely helpful. These tools allowed me to make changes to the expressions and immediately see the visual results of the matches without changing the code. This was incredibly useful because even small changes in the expressions, which might seem insignificant at first glance, could halt the progress of writing the functions for a significant amount of time.
+
+In summary, this project allowed me to solidify my knowledge of JSON syntax and how data is stored within it. Using regular expressions to find patterns significantly improved the parsing of JSON strings and deepened my understanding of how regex works. I learned how to construct regular expressions, how to use logic within them to achieve desired patterns, and how to group search results. Overall, this project enhanced my skills in using regular expressions and understanding their practical applications.
