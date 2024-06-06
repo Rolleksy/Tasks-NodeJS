@@ -73,20 +73,25 @@ function myJSONParse(json) {
         }
         while (str.length > 0) {
             let key, value;
+            // Retrieving Keys
             [key, str] = parseString(str);
+            
             str = trim(str);
             if (str[0] !== ':') {
                 throw new Error('Invalid Object in parseObject method');
             }
             str = trim(str.slice(1));
-            [value, str] = parseValue(str);
+            
+            // Retrieving Values
+            [value, str] = parseValue(str); 
             result[key] = value;
+            
             str = trim(str);
             if (str[0] === '}') {
                 return [result, str.slice(1)];
             }
             if (str[0] !== ',') {
-                throw new Error('Invalid Object in parseObject method');
+                throw new Error('Invalid Object in parseObject method, missing , character.');
             }
             str = trim(str.slice(1));
         }
@@ -106,7 +111,7 @@ function myJSONParse(json) {
         } if (str[0] === '{') {
             return parseObject(str);
         }
-        throw new Error('Invalid Value in parseValue method');   
+        throw new Error('Invalid Value in parseValue method. Unexpected character.');   
     }
 
     const [result, remaining] = parseValue(json);
