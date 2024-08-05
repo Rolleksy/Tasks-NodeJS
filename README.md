@@ -24,7 +24,7 @@ Stores information about where each unavailable part can be ordered.
 
 **Columns**
 
-     `id`: INTEGER PRIMARY KEY AUTOINCREMENT, the unique identifier for each warehouse,
+- `id`: INTEGER PRIMARY KEY AUTOINCREMENT, the unique identifier for each warehouse,
 - `name`: TEXT NOT NULL, the name of the warehouse,
 - `delivery_time`: INTEGER NOT NULL, the delivery time associated with the warehouse.
 
