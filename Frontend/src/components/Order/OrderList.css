@@ -1,0 +1,158 @@
+/* OrderList.css */
+.container {
+    padding: 20px;
+    text-align: center; /* Wyjustowanie na środku */
+}
+
+.header {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.orderList {
+    list-style: none;
+    padding: 0;
+}
+
+.orderItem {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    background-color: #f0f0f0; /* Kolor tła dla listy zamówień */
+    text-align: left; /* Wyrównanie do lewej linii pierwszej litery */
+}
+
+.orderItem:hover {
+    background-color: #e0e0e0;
+}
+
+.orderDetails {
+    margin-top: 10px;
+    font-size: 0.9rem; /* Mniejsza czcionka dla szczegółów zamówień */
+    background-color: #ffffff; /* Kolor tła dla szczegółów zamówień */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.partItem {
+    border-top: 1px solid #eee;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.partItem:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 500px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+}
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.button-add, .button-edit, .button-delete, .button-submit {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button-add:hover, .button-edit:hover, .button-delete:hover, .button-submit:hover {
+    background-color: #0056b3;
+}
+/* OrderList.css */
+/* OrderList.css */
+.addedParts {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.button-add-part {
+    background-color: #28a745;
+}
+
+.button-add-part:hover {
+    background-color: #218838;
+}
+
+.button-submit {
+    background-color: #007bff;
+}
+
+.button-submit:hover {
+    background-color: #0056b3;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    position: relative;
+    width: 400px;
+    max-width: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
