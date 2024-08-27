@@ -3,6 +3,7 @@ import api from '../../api';
 import './OrderList.css';
 
 const OrderList = () => {
+    // HOOKS
     const [orders, setOrders] = useState([]);
     const [expandedOrderId, setExpandedOrderId] = useState(null);
     const [orderDetails, setOrderDetails] = useState({});
@@ -14,15 +15,20 @@ const OrderList = () => {
     const [selectedPart, setSelectedPart] = useState({ id: '', name: '' });
     const [partQuantity, setPartQuantity] = useState(1);
 
+    // useEffect hook to fetch orders and parts on component mount
     useEffect(() => {
         fetchOrders();
         fetchParts();
     }, []);
 
+    // FUNCTIONS
+
+    // Fetch orders from the API to populate the order list
     const fetchOrders = async () => {
         try {
             setLoading(true);
             const response = await api.get('/api/orders');
+            console.log('Fetched orders:', response.data); // Debugging
             setOrders(response.data);
         } catch (error) {
             console.error('Error fetching orders:', error.response?.data || error.message);
@@ -31,7 +37,7 @@ const OrderList = () => {
         }
     };
     
-
+    // Fetch parts from the API to populate the part selection dropdown
     const fetchParts = async () => {
         try {
             const response = await api.get('/api/parts');
@@ -41,6 +47,7 @@ const OrderList = () => {
         }
     };
 
+    // Handle click on an order to expand and show details
     const handleOrderClick = async (orderId) => {
         if (expandedOrderId === orderId) {
             setExpandedOrderId(null);
@@ -60,6 +67,7 @@ const OrderList = () => {
         }
     };
 
+    // Handle delete order button click to delete an order from database
     const handleDeleteOrder = async (orderId) => {
         try {
             await api.delete(`/api/orders/${orderId}`);
@@ -69,50 +77,53 @@ const OrderList = () => {
         }
     };
 
-    const handleEditOrder = async (orderId) => {
-        alert('Edit functionality not yet implemented');
-    };
-
+    // Show modal to add a new order
     const handleShowModal = () => {
         setShowModal(true);
     };
 
+    // Close modal and reset new order form, it needs to fetch orders to refresh the list
     const handleCloseModal = () => {
         setShowModal(false);
         setNewOrder({ client_name: '', parts: [] });
         fetchOrders(); // Refresh order list after adding a new order
     };
 
+    // Handle input change in the modal new order form
     const handleInputChange = (e) => {
         setNewOrder({ ...newOrder, [e.target.name]: e.target.value });
     };
 
+    // Handle part selection in the modal new order form
     const handlePartSelection = (e) => {
         const partId = parseInt(e.target.value, 10);
         const part = availableParts.find(part => part.id === partId);
         setSelectedPart(part || { id: '', name: '' });
     };
 
+    // Handle part quantity change in the modal new order form
     const handlePartQuantityChange = (e) => {
         setPartQuantity(parseInt(e.target.value, 10));
     };
-
+    
+    // Add selected part to the new order
     const handleAddPart = () => {
         if (selectedPart.id) {
             setNewOrder(prevOrder => ({
                 ...prevOrder,
                 parts: [...prevOrder.parts, { part_id: selectedPart.id, name: selectedPart.name, quantity: partQuantity }]
             }));
-            setSelectedPart({ id: '', name: '' });
-            setPartQuantity(1);
+            setSelectedPart({ id: '', name: '' }); // reset selected part after adding a part
+            setPartQuantity(1); // default quantity to 1 after adding a part
         }
     };
 
+    // Submit new order to the API
     const handleSubmitOrder = async () => {
         try {
             setLoading(true);
             const response = await api.post('/api/orders', newOrder);
-            setOrders(prevOrders => [...prevOrders, response.data]);
+            setOrders(prevOrders => [...prevOrders, response.data]); // Add new order to the local list of orders
             handleCloseModal();
         } catch (error) {
             console.error('Error adding new order:', error);
@@ -121,6 +132,7 @@ const OrderList = () => {
         }
     };
 
+    // HTML
     return (
         <div className="container">
             <h1 className="header">Order List</h1>
@@ -136,28 +148,27 @@ const OrderList = () => {
                                 className="orderItem"
                             >
                                 <div>
-                                    <strong>Date:</strong> {order.order_date}<br />
-                                    <strong>Client:</strong> {order.client_name}<br />
-                                    <strong>Total Cost:</strong> ${order.total_cost?.toFixed(2) || 'N/A'}<br />
-                                    <strong>Labor Cost:</strong> ${order.labor_cost?.toFixed(2) || 'N/A'}<br />
-                                    <strong>Total Time:</strong> {order.total_time || 'N/A'} hours<br/>
+                                    <strong>Date:</strong> {order.Date || 'N/A'}<br />
+                                    <strong>Client:</strong> {order.Client || 'N/A'}<br />
+                                    <strong>Total Cost:</strong> {order.Total_Cost || 'N/A'}<br />
+                                    <strong>Labor Cost:</strong> {order.Labor_Cost || 'N/A'}<br />
+                                    <strong>Parts Cost:</strong> {order.Parts_Cost || 'N/A'}<br />
+                                    <strong>Total Time:</strong> {order.Total_Time || 'N/A'}<br />
+                                    <strong>ETA Date:</strong> {order.ETA_Delivery || 'N/A'}<br />
                                 </div>
-                                <button onClick={() => handleEditOrder(order.id)} className="button-edit">Edit</button>
                                 <button onClick={() => handleDeleteOrder(order.id)} className="button-delete">Delete</button>
                                 {expandedOrderId === order.id && (
                                     detailsLoading[order.id] ? (
                                         <div>Loading details...</div>
                                     ) : (
                                         <ul className="orderDetails">
-                                            {orderDetails[order.id]?.details?.map((part, index) => (
+                                            {orderDetails[order.id]?.parts?.map((part, index) => (
                                                 <li key={index} className="partItem">
                                                     <div>
-                                                        <strong>Part:</strong> {part.name}<br />
+                                                        <strong>Part:</strong> {part.part_name}<br />
                                                         <strong>Quantity:</strong> {part.quantity}<br />
                                                         <strong>Price:</strong> ${part.price}<br />
-                                                        <strong>Work Hours:</strong> {part.work_hours}<br />
-                                                        <strong>Warehouse:</strong> {part.warehouse_name}<br />
-                                                        <strong>Delivery Time:</strong> {part.delivery_time} hours
+                                                        <strong>Work Hours per part:</strong> {part.work_hours}<br />
                                                     </div>
                                                 </li>
                                             ))}
@@ -171,6 +182,7 @@ const OrderList = () => {
                 </>
             )}
 
+            
             {showModal && (
                 <div className="modal">
                     <div className="modal-content">

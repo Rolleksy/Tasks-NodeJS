@@ -28,8 +28,7 @@ const login = (req, res) => {
         const payload = { 
             id: user.id, 
             username: user.username,
-            // Token will expire in 1 hour - fix?
-            exp: moment().add(10, "second").unix()
+            exp: moment().add(1, "hour").unix()
         };
         const token = JWTCreate({ alg: 'HS256', typ: 'JWT' }, payload, SECRET_KEY);
         res.status(200).json({ token });

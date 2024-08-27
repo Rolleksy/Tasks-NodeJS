@@ -1,5 +1,6 @@
 const {usersDb} = require('../database');
 
+// Create a new user
 const createUser = (username, hashedPassword, callback) => {
     const stmt = usersDb.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
     stmt.run(username, hashedPassword, function (err) {
@@ -8,9 +9,14 @@ const createUser = (username, hashedPassword, callback) => {
     stmt.finalize();
 };
 
+// Find a user by username
 const findUserByUsername = (username, callback) => {
     usersDb.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
-        callback(err, user);
+        if (err) {
+            callback(err, null);
+        } else {
+            callback(null, user || null);
+        }
     });
 };
 

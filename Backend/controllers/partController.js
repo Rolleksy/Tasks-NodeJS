@@ -1,5 +1,6 @@
 const { partsDb } = require('../database');
 
+// Get all parts
 const getAllParts = (req, res) => {
     partsDb.all("SELECT * FROM Parts", [], (err, rows) => {
         if (err) {
@@ -9,6 +10,7 @@ const getAllParts = (req, res) => {
     });
 };
 
+// Create a new part
 const createPart = (req, res) => {
     const { name, availability, work_hours, warehouse_id, price } = req.body;
 
@@ -24,6 +26,7 @@ const createPart = (req, res) => {
     );
 };
 
+// Delete a part by ID
 const deletePart = (req, res) => {
     const { id } = req.params;
 
