@@ -1,91 +1,118 @@
-// tests/orderController.test.js
-
 const request = require('supertest');
-const app = require('../server'); // Załaduj aplikację zamiast uruchamiać serwer
+const app = require('../server');
 const sqlite3 = require('sqlite3');
+let db;
+
+beforeAll(() => {
+  db = new sqlite3.Database(':memory:');
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      db.run("CREATE TABLE Orders (id INTEGER PRIMARY KEY, client_name TEXT, order_date TEXT, total_cost REAL, labor_cost REAL, total_time REAL, ETADelivery TEXT)", (err) => {
+        if (err) reject(err);
+      });
+      db.run("CREATE TABLE OrderParts (order_id INTEGER, part_id INTEGER, quantity INTEGER, FOREIGN KEY(order_id) REFERENCES Orders(id))", (err) => {
+        if (err) reject(err);
+      });
+      db.run("CREATE TABLE Parts (id INTEGER PRIMARY KEY, price REAL, work_hours REAL, availability INTEGER, warehouse_id INTEGER)", (err) => {
+        if (err) reject(err);
+      });
+      db.run("CREATE TABLE Warehouse (id INTEGER PRIMARY KEY, delivery_time INTEGER)", (err) => {
+        if (err) reject(err);
+      });
+      resolve();
+    });
+  });
+});
+
+beforeEach(() => {
+  return new Promise((resolve, reject) => {
+    db.run('DELETE FROM Orders', (err) => {
+      if (err) reject(err);
+      else resolve();
+    });
+  });
+});
+
+afterAll(() => {
+  return new Promise((resolve) => {
+    db.close(() => resolve());
+  });
+});
 
 describe('Order Controller', () => {
-    let createdOrderId;
-    let db;
-
-    beforeAll(async () => {
-        db = new sqlite3.Database(':memory:');
-
-        await new Promise((resolve, reject) => {
-            db.serialize(() => {
-                db.run("CREATE TABLE Parts (id INTEGER PRIMARY KEY, name TEXT, price REAL, work_hours REAL, availability INTEGER)", (err) => {
-                    if (err) reject(err);
-                });
-                db.run("CREATE TABLE Orders (id INTEGER PRIMARY KEY, client_name TEXT)", (err) => {
-                    if (err) reject(err);
-                });
-                db.run("CREATE TABLE OrderParts (order_id INTEGER, part_id INTEGER, quantity INTEGER, FOREIGN KEY(order_id) REFERENCES Orders(id), FOREIGN KEY(part_id) REFERENCES Parts(id))", (err) => {
-                    if (err) reject(err);
-                });
-                resolve();
-            });
+  describe('POST /api/orders', () => {
+    it('should create a new order', async () => {
+      const response = await request(app)
+        .post('/api/orders')
+        .send({
+          client_name: 'John Doe',
+          parts: [
+            { part_id: 1, quantity: 2 }
+          ]
         });
 
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('order_id');
     });
+  });
+
+  describe('GET /api/orders/:id', () => {
+    let createdOrderId;
 
     beforeEach(async () => {
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM Orders', [], (err) => {
-                if (err) reject(err);
-                else resolve();
-            });
+      const response = await request(app)
+        .post('/api/orders')
+        .send({
+          client_name: 'John Doe',
+          parts: [
+            { part_id: 1, quantity: 2 }
+          ]
         });
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM OrderParts', [], (err) => {
-                if (err) reject(err);
-                else resolve();
-            });
-        });
-        await new Promise((resolve, reject) => {
-            db.run('DELETE FROM Parts', [], (err) => {
-                if (err) reject(err);
-                else resolve();
-            });
-        });
-
-        await new Promise((resolve, reject) => {
-            db.run(
-                "INSERT INTO Parts (id, name, price, work_hours, availability) VALUES (1, 'Part A', 10.0, 2.0, 10)",
-                [],
-                (err) => {
-                    if (err) reject(err);
-                    else resolve();
-                }
-            );
-        });
-
-        const response = await request(app).post('/api/orders').send({
-            client_name: 'John Doe',
-            parts: [
-                { part_id: 1, quantity: 2 }
-            ]
-        });
-
-        createdOrderId = response.body.order_id;
+      createdOrderId = response.body.order_id;
     });
 
-    afterAll(done => {
-        db.close(done);
+    it('should retrieve the order details', async () => {
+      const response = await request(app)
+        .get(`/api/orders/${createdOrderId}`);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('id', createdOrderId);
+      expect(response.body).toHaveProperty('client_name', 'John Doe');
     });
 
-    it('GET /api/orders/:id should return order details for a given ID', async () => {
-        const response = await request(app).get(`/api/orders/${createdOrderId}`);
+    it('should return 404 if order does not exist', async () => {
+      const invalidOrderId = createdOrderId + 1;
+      const response = await request(app)
+        .get(`/api/orders/${invalidOrderId}`);
 
-        expect(response.status).toBe(200);
-        expect(response.body.id).toBe(createdOrderId);
-        expect(response.body.client_name).toBe('John Doe');
+      expect(response.status).toBe(404);
+    });
+  });
+
+  describe('DELETE /api/orders/:id', () => {
+    let createdOrderId;
+
+    beforeEach(async () => {
+      const response = await request(app)
+        .post('/api/orders')
+        .send({
+          client_name: 'John Doe',
+          parts: [
+            { part_id: 1, quantity: 2 }
+          ]
+        });
+      createdOrderId = response.body.order_id;
     });
 
-    it('DELETE /api/orders/:id should delete an order', async () => {
-        const response = await request(app).delete(`/api/orders/${createdOrderId}`);
-        expect(response.status).toBe(204);
+    it('should delete the order', async () => {
+      const response = await request(app)
+        .delete(`/api/orders/${createdOrderId}`);
 
-        const checkResponse = await request(app).get(`/api/orders/${createdOrderId}`);
-        expect(checkResponse.status).toBe(404);
+      expect(response.status).toBe(204);
+
+      const checkResponse = await request(app)
+        .get(`/api/orders/${createdOrderId}`);
+      expect(checkResponse.status).toBe(404);
     });
+  });
 });
