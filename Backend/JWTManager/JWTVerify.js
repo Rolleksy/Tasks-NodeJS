@@ -3,7 +3,7 @@ const crypto = require('crypto');
 // Base64 URL decode function used to decode the payload of the JWT
 function base64UrlDecode(str) {
     let padding = '='.repeat((4 - str.length % 4) % 4);
-    str = (str + padding).replace(/\-/g, '+').replace(/_/g, '/');
+    str = (str + padding).replace(/-/g, '+').replace(/_/g, '/');
     return Buffer.from(str, 'base64').toString('utf8');
 }
 
