@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: /backend
-        run: npm-install
+        run: npm install
 
       - name: Run ESLint
         working-directory: /backend
