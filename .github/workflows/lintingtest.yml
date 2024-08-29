@@ -21,13 +21,13 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        working-directory: ./backend
+        working-directory: /backend
         run: npm-install
 
       - name: Run ESLint
-        working-directory: ./backend
+        working-directory: /backend
         run: npm run lint
 
       - name: Run tests
-        working-directory: ./backend
+        working-directory: /backend
         run: npm test -- --coverage
