@@ -10,6 +10,9 @@ on:
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
+    env:
+      USERDB_PATH: ${{ secrets.USERDB_PATH }}
+      PARTSDB_PATH: ${{ secrets.PARTSDB_PATH }}
 
     steps:
       - name: Checkout repository
