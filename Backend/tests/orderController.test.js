@@ -1,7 +1,7 @@
 const request = require('supertest');
 const sqlite3 = require('sqlite3');
-const server = require('../server'); // Upewnij się, że Twój serwer jest eksportowany w odpowiedni sposób
-const { partsDb } = require('../database'); // Jeśli Twój moduł bazodanowy zwraca bazę danych
+const server = require('../server');
+const { partsDb } = require('../database');
 
 describe('Order Controller', () => {
   let createdOrderId;
@@ -73,7 +73,7 @@ describe('Order Controller', () => {
       console.log('Server closed');
       done();
     })
-    partsDb.close(done); // Zamknięcie bazy danych po wszystkich testach
+    partsDb.close(done);
   });
 
   it('GET /api/orders/:id should return order details for a given ID', async () => {
