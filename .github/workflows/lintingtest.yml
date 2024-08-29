@@ -1,0 +1,30 @@
+name: Linting and Testing
+
+on:
+  push:
+    branches:
+      - PersonalProject
+  pull_request:
+    branches:
+      - PersonalProject
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm-install
+
+      - name: Run ESLint
+        working-directory: ./backend
+        run: npm run lint
+
+      - name: Run tests
+        working-directory: ./backend
+        run: npm test -- --coverage
