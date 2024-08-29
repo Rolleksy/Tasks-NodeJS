@@ -32,10 +32,12 @@ app.use('/auth', authRoutes);
 app.use('/api', partsRoutes);
 app.use('/api', ordersRoutes);
 
-// Server listening as const to allow exporting for testing
-const server = app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+// if imported with require, don't start the server - for testing purposes - wut even
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+}
 
-module.exports = server;
+module.exports = app;
 
