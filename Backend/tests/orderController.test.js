@@ -1,11 +1,33 @@
 const request = require('supertest');
-const server = require('../server');
-const { partsDb } = require('../database');
+const sqlite3 = require('sqlite3');
+const server = require('../server'); // Upewnij się, że Twój serwer jest eksportowany w odpowiedni sposób
+const { partsDb } = require('../database'); // Jeśli Twój moduł bazodanowy zwraca bazę danych
 
 describe('Order Controller', () => {
   let createdOrderId;
+  let partsDb;
 
   beforeAll(async () => {
+    partsDb = new sqlite3.Database(':memory:');
+
+    // Tworzenie tabel
+    await new Promise((resolve, reject) => {
+      partsDb.serialize(() => {
+        partsDb.run("CREATE TABLE Parts (id INTEGER PRIMARY KEY, name TEXT, price REAL, work_hours REAL, availability INTEGER)", (err) => {
+          if (err) reject(err);
+        });
+        partsDb.run("CREATE TABLE Orders (id INTEGER PRIMARY KEY, client_name TEXT)", (err) => {
+          if (err) reject(err);
+        });
+        partsDb.run("CREATE TABLE OrderParts (order_id INTEGER, part_id INTEGER, quantity INTEGER, FOREIGN KEY(order_id) REFERENCES Orders(id), FOREIGN KEY(part_id) REFERENCES Parts(id))", (err) => {
+          if (err) reject(err);
+        });
+        resolve();
+      });
+    });
+  });
+
+  beforeEach(async () => {
     await new Promise((resolve, reject) => {
       partsDb.run('DELETE FROM Orders', [], (err) => {
         if (err) reject(err);
@@ -35,9 +57,7 @@ describe('Order Controller', () => {
         }
       );
     });
-  });
 
-  beforeEach(async () => {
     const response = await request(server).post('/api/orders').send({
       client_name: 'John Doe',
       parts: [
@@ -46,6 +66,10 @@ describe('Order Controller', () => {
     });
 
     createdOrderId = response.body.order_id;
+  });
+
+  afterAll(done => {
+    partsDb.close(done); // Zamknięcie bazy danych po wszystkich testach
   });
 
   it('GET /api/orders/:id should return order details for a given ID', async () => {
