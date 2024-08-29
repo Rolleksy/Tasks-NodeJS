@@ -1,0 +1,31 @@
+name: Lint and Test
+
+on:
+  push:
+    branches: [ PersonalProject ]
+  pull_request:
+    branches: [ PersonalProject ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm install
+      - run: npm run lint
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checout@v2
+    - name: Set up NodeJS
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    - run: npm install
+    - run: npm test
