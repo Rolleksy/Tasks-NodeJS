@@ -69,6 +69,10 @@ describe('Order Controller', () => {
   });
 
   afterAll(done => {
+    server.close(() => {
+      console.log('Server closed');
+      done();
+    })
     partsDb.close(done); // Zamknięcie bazy danych po wszystkich testach
   });
 
