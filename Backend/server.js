@@ -32,12 +32,10 @@ app.use('/auth', authRoutes);
 app.use('/api', partsRoutes);
 app.use('/api', ordersRoutes);
 
-// if imported with require, don't start the server - for testing purposes - wut even
-if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
-}
 
-module.exports = app;
+const server = app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
+module.exports = server;
 

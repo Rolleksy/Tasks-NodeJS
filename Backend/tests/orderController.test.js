@@ -1,118 +1,122 @@
 const request = require('supertest');
-const app = require('../server');
-const sqlite3 = require('sqlite3');
-let db;
+const express = require('express');
+const orderController = require('../controllers/orderController');
+const orderService = require('../services/orderService');
 
-beforeAll(() => {
-  db = new sqlite3.Database(':memory:');
-  return new Promise((resolve, reject) => {
-    db.serialize(() => {
-      db.run("CREATE TABLE Orders (id INTEGER PRIMARY KEY, client_name TEXT, order_date TEXT, total_cost REAL, labor_cost REAL, total_time REAL, ETADelivery TEXT)", (err) => {
-        if (err) reject(err);
-      });
-      db.run("CREATE TABLE OrderParts (order_id INTEGER, part_id INTEGER, quantity INTEGER, FOREIGN KEY(order_id) REFERENCES Orders(id))", (err) => {
-        if (err) reject(err);
-      });
-      db.run("CREATE TABLE Parts (id INTEGER PRIMARY KEY, price REAL, work_hours REAL, availability INTEGER, warehouse_id INTEGER)", (err) => {
-        if (err) reject(err);
-      });
-      db.run("CREATE TABLE Warehouse (id INTEGER PRIMARY KEY, delivery_time INTEGER)", (err) => {
-        if (err) reject(err);
-      });
-      resolve();
+jest.mock('../services/orderService');
+
+const app = express();
+app.use(express.json());
+app.get('/orders', orderController.getOrders);
+app.get('/orders/:id', orderController.getOrderDetails);
+app.post('/orders', orderController.createOrder);
+app.delete('/orders/:id', orderController.deleteOrder);
+
+describe('orderController', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('GET /orders', () => {
+    it('should return a list of orders', async () => {
+      orderService.getOrders.mockResolvedValue([
+        { id: 1, Client: 'John Doe', Date: '2024-01-01', Total_Cost: '$100.00', Labor_Cost: '$50.00', Parts_Cost: '$50.00', Total_Time: '10 hours', ETA_Delivery: '2024-01-05' }
+      ]);
+
+      const response = await request(app).get('/orders');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(1);
+      expect(orderService.getOrders).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle errors', async () => {
+      orderService.getOrders.mockRejectedValue(new Error('Service error'));
+
+      const response = await request(app).get('/orders');
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Service error');
     });
   });
-});
 
-beforeEach(() => {
-  return new Promise((resolve, reject) => {
-    db.run('DELETE FROM Orders', (err) => {
-      if (err) reject(err);
-      else resolve();
+  describe('GET /orders/:id', () => {
+    it('should return order details', async () => {
+      orderService.getOrderDetails.mockResolvedValue({ id: 1, client_name: 'John Doe', order_date: '2024-01-01', total_cost: 100.00 });
+
+      const response = await request(app).get('/orders/1');
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty('id', 1);
+      expect(orderService.getOrderDetails).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return 404 if order not found', async () => {
+      orderService.getOrderDetails.mockResolvedValue(null);
+
+      const response = await request(app).get('/orders/1');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('error', 'Order not found');
+    });
+
+    it('should handle errors', async () => {
+      orderService.getOrderDetails.mockRejectedValue(new Error('Service error'));
+
+      const response = await request(app).get('/orders/1');
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Service error');
     });
   });
-});
 
-afterAll(() => {
-  return new Promise((resolve) => {
-    db.close(() => resolve());
-  });
-});
-
-describe('Order Controller', () => {
-  describe('POST /api/orders', () => {
+  describe('POST /orders', () => {
     it('should create a new order', async () => {
-      const response = await request(app)
-        .post('/api/orders')
-        .send({
-          client_name: 'John Doe',
-          parts: [
-            { part_id: 1, quantity: 2 }
-          ]
-        });
+      orderService.createOrder.mockResolvedValue({ order_id: 1 });
+
+      const response = await request(app).post('/orders').send({ client_name: 'John Doe', parts: [{ part_id: 1, quantity: 2 }] });
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('order_id');
+      expect(orderService.createOrder).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle errors', async () => {
+      orderService.createOrder.mockRejectedValue(new Error('Service error'));
+
+      const response = await request(app).post('/orders').send({ client_name: 'John Doe', parts: [{ part_id: 1, quantity: 2 }] });
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Service error');
     });
   });
 
-  describe('GET /api/orders/:id', () => {
-    let createdOrderId;
+  describe('DELETE /orders/:id', () => {
+    it('should delete an order', async () => {
+      orderService.deleteOrder.mockResolvedValue(true);
 
-    beforeEach(async () => {
-      const response = await request(app)
-        .post('/api/orders')
-        .send({
-          client_name: 'John Doe',
-          parts: [
-            { part_id: 1, quantity: 2 }
-          ]
-        });
-      createdOrderId = response.body.order_id;
-    });
-
-    it('should retrieve the order details', async () => {
-      const response = await request(app)
-        .get(`/api/orders/${createdOrderId}`);
-
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveProperty('id', createdOrderId);
-      expect(response.body).toHaveProperty('client_name', 'John Doe');
-    });
-
-    it('should return 404 if order does not exist', async () => {
-      const invalidOrderId = createdOrderId + 1;
-      const response = await request(app)
-        .get(`/api/orders/${invalidOrderId}`);
-
-      expect(response.status).toBe(404);
-    });
-  });
-
-  describe('DELETE /api/orders/:id', () => {
-    let createdOrderId;
-
-    beforeEach(async () => {
-      const response = await request(app)
-        .post('/api/orders')
-        .send({
-          client_name: 'John Doe',
-          parts: [
-            { part_id: 1, quantity: 2 }
-          ]
-        });
-      createdOrderId = response.body.order_id;
-    });
-
-    it('should delete the order', async () => {
-      const response = await request(app)
-        .delete(`/api/orders/${createdOrderId}`);
+      const response = await request(app).delete('/orders/1');
 
       expect(response.status).toBe(204);
+      expect(orderService.deleteOrder).toHaveBeenCalledTimes(1);
+    });
 
-      const checkResponse = await request(app)
-        .get(`/api/orders/${createdOrderId}`);
-      expect(checkResponse.status).toBe(404);
+    it('should return 404 if order not found', async () => {
+      orderService.deleteOrder.mockResolvedValue(false);
+
+      const response = await request(app).delete('/orders/1');
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty('error', 'Order not found');
+    });
+
+    it('should handle errors', async () => {
+      orderService.deleteOrder.mockRejectedValue(new Error('Service error'));
+
+      const response = await request(app).delete('/orders/1');
+
+      expect(response.status).toBe(500);
+      expect(response.body).toHaveProperty('error', 'Service error');
     });
   });
 });

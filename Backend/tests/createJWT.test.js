@@ -22,9 +22,9 @@ describe('createJwt', () => {
             .replace(/\//g, '_');
 
         const expectedEncodedPayload = Buffer.from(JSON.stringify({
-            ...payload,
-            exp: expect.any(Number)
-        })).toString('base64')
+                ...payload,
+                exp: expect.any(Number)
+            })).toString('base64')
             .replace(/=/g, '')
             .replace(/\+/g, '-')
             .replace(/\//g, '_');
@@ -55,7 +55,7 @@ describe('createJwt', () => {
         const token1 = createJwt(header, payload, secret);
         await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds to avoid creating the token at the same second
         const token2 = createJwt(header, payload, secret);
-        
+
         expect(token1).not.toBe(token2);
     });
 });

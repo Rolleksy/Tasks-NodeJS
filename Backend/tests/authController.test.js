@@ -1,7 +1,11 @@
 const request = require('supertest');
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { register, login, verifyToken } = require('../controllers/authController');
+const {
+    register,
+    login,
+    verifyToken
+} = require('../controllers/authController');
 const userModel = require('../models/userModel');
 const JWTCreate = require('../JWTManager/JWTCreate');
 const JWTVerify = require('../JWTManager/JWTVerify');
@@ -10,6 +14,7 @@ jest.mock('../models/userModel');
 jest.mock('../JWTManager/JWTCreate');
 jest.mock('../JWTManager/JWTVerify');
 
+// Mocking server
 const app = express();
 app.use(express.json());
 app.post('/register', register);
@@ -25,7 +30,10 @@ describe('Auth Controller', () => {
 
             const response = await request(app)
                 .post('/register')
-                .send({ username: 'testuser', password: 'testpass' });
+                .send({
+                    username: 'testuser',
+                    password: 'testpass'
+                });
 
             expect(response.status).toBe(201);
             expect(response.text).toBe('User registered');
@@ -38,7 +46,10 @@ describe('Auth Controller', () => {
 
             const response = await request(app)
                 .post('/register')
-                .send({ username: 'testuser', password: 'testpass' });
+                .send({
+                    username: 'testuser',
+                    password: 'testpass'
+                });
 
             expect(response.status).toBe(500);
             expect(response.text).toBe('Error registering new user');
@@ -47,7 +58,11 @@ describe('Auth Controller', () => {
 
     describe('POST /login', () => {
         it('should login user with valid credentials', async () => {
-            const mockUser = { id: 1, username: 'testuser', password: bcrypt.hashSync('testpass', 10) };
+            const mockUser = {
+                id: 1,
+                username: 'testuser',
+                password: bcrypt.hashSync('testpass', 10)
+            };
 
             userModel.findUserByUsername.mockImplementation((username, callback) => {
                 callback(null, mockUser);
@@ -57,7 +72,10 @@ describe('Auth Controller', () => {
 
             const response = await request(app)
                 .post('/login')
-                .send({ username: 'testuser', password: 'testpass' });
+                .send({
+                    username: 'testuser',
+                    password: 'testpass'
+                });
 
             expect(response.status).toBe(200);
             expect(response.body.token).toBe('mocked-jwt-token');
@@ -70,7 +88,10 @@ describe('Auth Controller', () => {
 
             const response = await request(app)
                 .post('/login')
-                .send({ username: 'testuser', password: 'wrongpass' });
+                .send({
+                    username: 'testuser',
+                    password: 'wrongpass'
+                });
 
             expect(response.status).toBe(401);
             expect(response.text).toBe('Invalid username or password');
@@ -81,14 +102,22 @@ describe('Auth Controller', () => {
         let req, res, next;
 
         beforeEach(() => {
-            req = { headers: {} };
-            res = { status: jest.fn(() => res), send: jest.fn() };
+            req = {
+                headers: {}
+            };
+            res = {
+                status: jest.fn(() => res),
+                send: jest.fn()
+            };
             next = jest.fn();
         });
 
         it('should call next if token is valid', () => {
             req.headers['Authorization'] = 'Bearer valid-token';
-            JWTVerify.mockImplementation(() => ({ id: 1, username: 'testuser' }));
+            JWTVerify.mockImplementation(() => ({
+                id: 1,
+                username: 'testuser'
+            }));
 
             verifyToken(req, res, next);
 
