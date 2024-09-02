@@ -11,8 +11,8 @@ jobs:
   lint-and-test:
     runs-on: ubuntu-latest
     env:
-      USERDB_PATH: ${{ secrets.USERDB_PATH }}
-      PARTDB_PATH: ${{ secrets.PARTDB_PATH }}
+      USERDB_PATH: ./data/users.db
+      PARTDB_PATH: ./data/parts.db
 
     steps:
       - name: Checkout repository
