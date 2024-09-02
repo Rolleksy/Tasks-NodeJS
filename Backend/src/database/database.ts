@@ -28,7 +28,8 @@ export default class Database implements IDatabase {
             this.usersDb = new sqlite3.Database(':memory:');
             this.partsDb = new sqlite3.Database(':memory:');
         } else {
-            const { USERDB_PATH, PARTDB_PATH } = process.env;
+            const USERDB_PATH = process.env.USERDB_PATH;
+            const PARTDB_PATH = process.env.PARTDB_PATH;
             if (!USERDB_PATH || !PARTDB_PATH) {
                 throw new Error('Database paths not provided');
             }
