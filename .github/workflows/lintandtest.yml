@@ -38,7 +38,7 @@ jobs:
           echo "PARTSDB_PATH=${PARTSDB_PATH}"
 
       - name: Copy .env file
-        run: cp .env ./Backend/
+        run: cp Backend/.env ./Backend/
 
       - name: Run tests
         working-directory: ./Backend
