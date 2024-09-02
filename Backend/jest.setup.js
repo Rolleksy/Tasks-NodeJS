@@ -8,7 +8,7 @@ const originalConsoleLog = console.log;
 console.log = jest.fn();
 
 // restore console.error
-afterAll(() => {
-  console.error = originalConsoleError;
-  console.log = originalConsoleLog;
-});
+// afterAll(() => {
+//   console.error = originalConsoleError;
+//   console.log = originalConsoleLog;
+// });
