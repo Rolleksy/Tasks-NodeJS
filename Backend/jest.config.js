@@ -1,3 +1,4 @@
+require('dotenv').config({ path: './Backend/.env' });
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
