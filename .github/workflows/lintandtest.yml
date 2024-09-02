@@ -3,10 +3,10 @@ name: Linting and Testing
 on:
   push:
     branches:
-      - PersonalProjectTS
+      - PersonalProjTS
   pull_request:
     branches:
-      - PersonalProjectTS
+      - PersonalProjTS
 jobs:
   lint-and-test:
     runs-on: ubuntu-latest
