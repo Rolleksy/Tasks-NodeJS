@@ -37,9 +37,6 @@ jobs:
           echo "USERDB_PATH=${USERDB_PATH}"
           echo "PARTSDB_PATH=${PARTSDB_PATH}"
 
-      - name: Copy .env file
-        run: cp Backend/.env Backend/.env
-
       - name: Run tests
         working-directory: ./Backend
         run: npm test -- --coverage
