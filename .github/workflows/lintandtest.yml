@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       USERDB_PATH: ${{ secrets.USERDB_PATH }}
-      PARTDB_PATH: ${{ secrets.PARTSDB_PATH }}
+      PARTDB_PATH: ${{ secrets.PARTDB_PATH }}
 
     steps:
       - name: Checkout repository
@@ -35,7 +35,7 @@ jobs:
         working-directory: ./Backend
         run: |
           echo "USERDB_PATH=${USERDB_PATH}"
-          echo "PARTSDB_PATH=${PARTSDB_PATH}"
+          echo "PARTDB_PATH=${PARTDB_PATH}"
 
       - name: Run tests
         working-directory: ./Backend
