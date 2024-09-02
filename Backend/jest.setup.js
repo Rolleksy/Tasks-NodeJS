@@ -1,5 +1,4 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+require('dotenv').config({ path: "/.env" });
 // turns off console.error
 const originalConsoleError = console.error;
 console.error = jest.fn();
