@@ -1,0 +1,16 @@
+.App {
+    text-align: center;
+    background-color: #a3a3a3;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.log-btn {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}

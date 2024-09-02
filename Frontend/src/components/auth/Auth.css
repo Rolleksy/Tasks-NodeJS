@@ -1,0 +1,28 @@
+.authForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    margin-top: 10%;
+    gap: 2rem;
+    background-color: rgb(153, 153, 153);
+}
+.authForm button {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.5rem;
+    background-color: #f1356d;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+
+.error-message {
+    color: red;
+    margin-bottom: 10px;
+    background-color: azure;
+    padding: 1rem;
+  }
