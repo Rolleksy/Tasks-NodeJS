@@ -23,6 +23,8 @@ class JWTVerify {
 
         const decodedPayload = JSON.parse(this.base64UrlDecode(encodedPayload));
 
+        // Something fishy is going on here, not sure what to make of it
+        // Supposed to be exp check
         const now = Math.floor(Date.now() / 1000);
         if (decodedPayload.exp && decodedPayload.exp < now) {
             throw new Error('Token expired');

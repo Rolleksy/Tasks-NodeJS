@@ -5,6 +5,7 @@ import {IDatabase} from '../database/Idatabase';
 
 dotenv.config();
 
+// Labor rate per hour its in the .env file
 const laborRate = parseFloat(process.env.LABOR_RATE || '0');
 
 interface Part {
@@ -96,7 +97,7 @@ class OrderService {
             throw err;
         }
     }
-
+    // 
     public async getOrderDetails(orderId: number): Promise<OrderDetail | null> {
         const query = `
             SELECT 
@@ -145,12 +146,13 @@ class OrderService {
         }
     }
 
+    // Method to add business days to a date, excluding weekends
     private addBusinessDays(startDate: string, days: number): Date {
         const date = new Date(startDate);
         let daysAdded = 0;
-
         while (daysAdded < days) {
             date.setDate(date.getDate() + 1);
+            // Skip weekends
             if (date.getDay() !== 0 && date.getDay() !== 6) {
                 daysAdded++;
             }
@@ -158,7 +160,7 @@ class OrderService {
 
         return date;
     }
-
+    // Redundant method
     private calculateTotalTime(totalWorkHours: number, maxDeliveryTime: number): number {
         return totalWorkHours + maxDeliveryTime;
     }
@@ -215,6 +217,7 @@ class OrderService {
                 totalCost += (price! * part.quantity || 0);
                 totalWorkHours += (work_hours! * part.quantity || 0);
 
+                // Calculate new availability, ensuring it doesn't go below 0
                 const newAvailability = Math.max(0, availability! - part.quantity);
                 partsToUpdate.push({ id: part.part_id, newAvailability });
             });
@@ -234,15 +237,16 @@ class OrderService {
                 ETADelivery
             };
 
-            // Insert order
+            // Insert order in the database
             const result = await this.runDatabase(
                 "INSERT INTO Orders (client_name, order_date, total_cost, labor_cost, total_time, ETADelivery) VALUES (?, ?, ?, ?, ?, ?)",
                 [orderDetails.client_name, orderDetails.order_date, orderDetails.total_cost, orderDetails.labor_cost, orderDetails.total_time, orderDetails.ETADelivery]
             );
 
+            // Get the ID of the newly created order for linking parts
             const orderId = (result as sqlite3.RunResult).lastID;
 
-            // Insert order parts
+            // Insert order parts in the database, linking them to the order
             const insertOrderPartsPromises = updatedParts.map(part => {
                 return this.runDatabase(
                     "INSERT INTO OrderParts (order_id, part_id, quantity) VALUES (?, ?, ?)",

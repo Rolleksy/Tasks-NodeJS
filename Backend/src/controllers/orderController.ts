@@ -44,7 +44,7 @@ export class OrderController {
             res.status(400).json({ message: 'Invalid order data' });
             return;
         }
-
+        // Could it be an interface?
         const orderData = {
             client_name,
             order_date,
@@ -75,7 +75,7 @@ export class OrderController {
         try {
             const orderId = parseInt(id);
             await orderService.deleteOrder(orderId);
-            res.status(204).send(); // No content
+            res.status(204).send(); // No content, might be a good idea to return some message, json or html
         } catch (error) {
             console.error(`Error deleting order ID ${id}:`, error);
             res.status(500).json({ message: 'Internal Server Error' });
